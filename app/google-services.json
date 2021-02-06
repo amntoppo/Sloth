@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "334113395913",
+    "project_id": "sloth-7483a",
+    "storage_bucket": "sloth-7483a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334113395913:android:d90f70002f2b0eff5be918",
+        "android_client_info": {
+          "package_name": "com.aman.sloth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "334113395913-o6727i7cl802fecd9a4qmrd50trvqjri.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuyhzYssMYwEOPBINw7W1b-LLVaMirrxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "334113395913-o6727i7cl802fecd9a4qmrd50trvqjri.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
