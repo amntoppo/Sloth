@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
@@ -55,6 +56,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             FirebaseUser firebaseUser = myFirebaseAuth.getCurrentUser();
             if(firebaseUser != null) {
                 displaySplashScreen();
+                Toast.makeText(this, "Welcome: " + firebaseUser.getUid(), Toast.LENGTH_SHORT).show();
             }
             else {
                 showLoginLayout();
