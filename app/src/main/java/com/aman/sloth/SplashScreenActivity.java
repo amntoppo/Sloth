@@ -61,6 +61,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splashscreen);
 
         init();
+        displaySplashScreen();
 
     }
     @Override
@@ -107,6 +108,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()) {
                             Toast.makeText(SplashScreenActivity.this, "User already exists", Toast.LENGTH_SHORT).show();
+                            model = snapshot.getValue(CustomerInfoModel.class);
+                            gotoHomeActivity(model);
                         }
                         else {
                             showRegisterLayout();
@@ -170,10 +173,17 @@ public class SplashScreenActivity extends AppCompatActivity {
             .addOnSuccessListener(aVoid -> {
                 dialog.dismiss();
                 Toast.makeText(this, "Registration Success", Toast.LENGTH_SHORT).show();
+                gotoHomeActivity(model);
             });
 
         });
 
+    }
+
+    private void gotoHomeActivity(CustomerInfoModel model) {
+        Common.currentCustomer = model;
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
     }
 
     private void showLoginLayout() {

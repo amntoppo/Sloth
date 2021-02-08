@@ -18,6 +18,7 @@
         <item name="android:windowBackground">@drawable/sloth_splash</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
     <style name="LoginTheme" parent="FirebaseUI">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -48,5 +49,14 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
     </style>
+
+    <style name="Theme.Sloth.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Sloth.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Sloth.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
