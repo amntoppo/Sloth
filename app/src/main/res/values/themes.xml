@@ -43,6 +43,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:windowBackground">@android:color/background_dark</item>
+        <item name="colorButtonNormal">@color/white</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
