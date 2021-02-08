@@ -129,7 +129,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         TextInputEditText edit_first_name = (TextInputEditText)itemView.findViewById(R.id.edit_first_name);
         TextInputEditText edit_last_name = (TextInputEditText)itemView.findViewById(R.id.edit_last_name);
         TextInputEditText edit_phone = (TextInputEditText)itemView.findViewById(R.id.edit_phone_number);
-        Button button_continue = (Button)itemView.findViewById(R.id.button_continue);
+        Button button_continue = (Button)itemView.findViewById(R.id.button_register);
 
         //set phone number
         if(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null &&
