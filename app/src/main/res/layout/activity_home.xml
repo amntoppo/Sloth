@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:context=".HomeActivity">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
-
-    <include
-        layout="@layout/app_bar_main"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</androidx.drawerlayout.widget.DrawerLayout>
+        android:layout_height="match_parent"
+        />
+
+    <com.wwdablu.soumya.lottiebottomnav.LottieBottomNav
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:id="@+id/lottie_bottom_nav"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        app:menu_selected_height="48dp"
+        app:menu_selected_width="48dp"
+        app:menu_unselected_height="40dp"
+        app:menu_unselected_width="40dp"
+        app:menu_text_show_on_unselected="true"
+        />
+
+
+
+</RelativeLayout>

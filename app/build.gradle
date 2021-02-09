@@ -31,6 +31,9 @@ android {
     buildFeatures {
         viewBinding true
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -57,4 +60,7 @@ dependencies {
 
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+
+    implementation 'com.airbnb.android:lottie:3.4.1'
+    implementation 'com.github.wwdablu:lottiebottomnav:1.1.0'
 }
