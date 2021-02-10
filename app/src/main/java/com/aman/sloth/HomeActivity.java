@@ -3,13 +3,10 @@ package com.aman.sloth;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.widget.Toast;
-
 
 import com.aman.sloth.ui.gallery.GalleryFragment;
 import com.aman.sloth.ui.home.HomeFragment;
-import com.google.android.material.navigation.NavigationView;
+
 import com.wwdablu.soumya.lottiebottomnav.FontBuilder;
 import com.wwdablu.soumya.lottiebottomnav.FontItem;
 import com.wwdablu.soumya.lottiebottomnav.ILottieBottomNavCallback;
@@ -19,20 +16,14 @@ import com.wwdablu.soumya.lottiebottomnav.MenuItemBuilder;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
+
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+
 
 public class HomeActivity extends AppCompatActivity implements ILottieBottomNavCallback {
 
-    private AppBarConfiguration mAppBarConfiguration;
-    private NavigationView navigationView;
     LottieBottomNav lottieNav;
     ArrayList<MenuItem> list;
 
