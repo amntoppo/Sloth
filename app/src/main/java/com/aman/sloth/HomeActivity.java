@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.aman.sloth.ui.gallery.GalleryFragment;
 import com.aman.sloth.ui.home.HomeFragment;
-import com.aman.sloth.ui.slideshow.SlideshowFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.wwdablu.soumya.lottiebottomnav.FontBuilder;
 import com.wwdablu.soumya.lottiebottomnav.FontItem;
@@ -91,7 +90,7 @@ public class HomeActivity extends AppCompatActivity implements ILottieBottomNavC
                 selectedFragment = new GalleryFragment();
                 break;
             case 2:
-                selectedFragment = new SlideshowFragment();
+                //selectedFragment = new SlideshowFragment();
                 break;
             default:
                 selectedFragment = new HomeFragment();
