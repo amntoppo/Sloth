@@ -44,8 +44,6 @@ public class GalleryFragment extends Fragment {
     private TextView fadingText;
     //private TextView nameText;
     int count=0;
-    private String[] names = {"Aman", "", "", "", ""};
-    //private String customer_first_name;
 
     private RelativeLayout relativeLayout;
     private ConstraintLayout layoutHeader;
@@ -69,6 +67,7 @@ public class GalleryFragment extends Fragment {
                    fadingText.setText(Common.text[count]);
                     if(fadingText.getText() == "" ) {
                         fadingText.setText("Hi there, \n " + Common.currentCustomer.getFirstname());
+
                     }
                    count++;
                    if(count>3)
@@ -95,7 +94,7 @@ public class GalleryFragment extends Fragment {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new searchFragment()).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new searchFragment()).addToBackStack(null).commit();
                     }
 
                     @Override

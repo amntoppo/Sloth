@@ -87,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements ILottieBottomNavC
                 selectedFragment = new HomeFragment();
                 break;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).addToBackStack(null).commit();
     }
 
     @Override
@@ -103,5 +103,15 @@ public class HomeActivity extends AppCompatActivity implements ILottieBottomNavC
     @Override
     public void onAnimationCancel(int index, MenuItem menuItem) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() > 0){
+            getFragmentManager().popBackStackImmediate();
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 }
