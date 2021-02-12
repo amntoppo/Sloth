@@ -21,4 +21,5 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_home2">HomeActivity2</string>
     <string name="welcome_text_maps">Welcome</string>
+    <string name="where_to_go">Where to?</string>
 </resources>

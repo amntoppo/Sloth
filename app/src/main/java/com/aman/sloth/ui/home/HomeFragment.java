@@ -20,6 +20,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.aman.sloth.R;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -35,6 +36,10 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -43,6 +48,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.util.Arrays;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -54,8 +61,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
-    SlidingUpPanelLayout slidingUpPanelLayout;
-    TextView welcome_textview;
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+    private TextView welcome_textview;
+    private AutocompleteSupportFragment autocompleteSupportFragment;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,16 +74,41 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        init(root);
+        init(
+
+        );
+        initViews(root);
 
         return root;
     }
 
-    private void init(View root) {
+    private void initViews(View root) {
         //layout
         slidingUpPanelLayout = root.findViewById(R.id.layout_maps);
         welcome_textview = root.findViewById(R.id.places_text);
 
+
+
+    }
+
+    private void init() {
+
+        //initialize places
+        Places.initialize(getContext(), getString(R.string.google_maps_key));
+        autocompleteSupportFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteSupportFragment.setHint(getString(R.string.where_to_go));
+        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                Snackbar.make(getView(), ""+place.getLatLng(), Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                Snackbar.make(getView(), ""+status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
         locationRequest = new LocationRequest();
         locationRequest.setSmallestDisplacement(10f);
