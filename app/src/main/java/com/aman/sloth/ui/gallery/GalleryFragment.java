@@ -43,7 +43,7 @@ public class GalleryFragment extends Fragment {
     private GalleryViewModel galleryViewModel;
     private TextView fadingText;
     //private TextView nameText;
-    int count=0;
+    int count = 0;
 
     private RelativeLayout relativeLayout;
     private ConstraintLayout layoutHeader;
@@ -58,22 +58,21 @@ public class GalleryFragment extends Fragment {
 
         fadingText = root.findViewById(R.id.hello_text);
         //nameText = root.findViewById(R.id.text_name);
-            fadingText.setText("Hi there, \n " + Common.currentCustomer.getFirstname());
+        fadingText.setText("Hi there, \n " + Common.currentCustomer.getFirstname());
 
         Observable.interval(5, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(tick -> {
-                   fadingText.setText(Common.text[count]);
-                    if(fadingText.getText() == "" ) {
+                    fadingText.setText(Common.text[count]);
+                    if (fadingText.getText() == "") {
                         fadingText.setText("Hi there, \n " + Common.currentCustomer.getFirstname());
 
                     }
-                   count++;
-                   if(count>3)
-                       count=0;
+                    count++;
+                    if (count > 3)
+                        count = 0;
                 });
-
 
 
         relativeLayout = (RelativeLayout) root.findViewById(R.id.searchbar_layout);

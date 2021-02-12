@@ -42,6 +42,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -53,6 +54,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
+    SlidingUpPanelLayout slidingUpPanelLayout;
+    TextView welcome_textview;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -62,12 +66,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        init();
+        init(root);
 
         return root;
     }
 
-    private void init() {
+    private void init(View root) {
+        //layout
+        slidingUpPanelLayout = root.findViewById(R.id.layout_maps);
+        welcome_textview = root.findViewById(R.id.places_text);
+
+
         locationRequest = new LocationRequest();
         locationRequest.setSmallestDisplacement(10f);
         locationRequest.setInterval(5000);

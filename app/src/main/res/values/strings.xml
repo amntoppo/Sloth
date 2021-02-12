@@ -20,4 +20,5 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_home2">HomeActivity2</string>
+    <string name="welcome_text_maps">Welcome</string>
 </resources>
