@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "334113395913-qj39v0l6k5tpunihvj2j8b81jsd4v1ub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aman.sloth",
+            "certificate_hash": "d59a9e0d098745abea6c46998a08f7f8dd74ce79"
+          }
+        },
+        {
           "client_id": "334113395913-o6727i7cl802fecd9a4qmrd50trvqjri.apps.googleusercontent.com",
           "client_type": 3
         }
