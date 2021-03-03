@@ -2,6 +2,7 @@ package com.aman.sloth.ui.gallery;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 import com.aman.sloth.Common;
 import com.aman.sloth.R;
 import com.aman.sloth.ui.search.searchFragment;
+import com.aman.sloth.ui.shop.CreateShopActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -139,6 +141,13 @@ public class GalleryFragment extends Fragment implements View.OnClickListener{
             case R.id.layout_deliver_anything:
                 Log.e("button", "order anything");
                 break;
+            case R.id.layout_get_yourself_delivered:
+                break;
+            case R.id.layout_create_shop:
+                Intent intent = new Intent(getActivity(), CreateShopActivity.class);
+                startActivity(intent);
+                break;
+
         }
     }
 }

@@ -24,6 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.shop.CreateShopActivity"
+            android:theme="@style/Theme.Sloth.NoActionBar"/>
 
         <service android:name=".Services.FirebaseMessagingService">
             <intent-filter>
