@@ -23,6 +23,8 @@
     <string name="welcome_text_maps">Welcome</string>
     <string name="where_to_go">Where to?</string>
     <string name="shop_name">Shop Name</string>
+    <string name="category">Category</string>
+    <string name="setup_shop">Set up your shop</string>
 
     <string-array name="itemselect">
         <item>Medicines</item>
