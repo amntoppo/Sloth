@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ShopModel {
-    private String shopName, description, category;
+    private String shopName, description, category, city;
 
     public String getDescription() {
         return description;
@@ -14,10 +14,11 @@ public class ShopModel {
         this.description = description;
     }
 
-    public ShopModel(String shopName, String description, String category) {
+    public ShopModel(String shopName, String description, String category, String city) {
         this.shopName = shopName;
         this.description = description;
         this.category = category;
+        this.city = city;
     }
 
     public String getShopName() {
@@ -41,6 +42,7 @@ public class ShopModel {
         result.put("shopname", shopName);
         result.put("description", description);
         result.put("category", category);
+        result.put("city", city);
         return result;
     }
 }

@@ -25,7 +25,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.shop.CreateShopActivity"
-            android:theme="@style/Theme.Sloth.NoActionBar"/>
+            android:theme="@style/Theme.Sloth.NoActionBar"
+            android:noHistory="true" >
+
+        </activity>
+        <activity android:name=".ui.shop.ShopDashboardActivity"
+            android:theme="@style/Theme.Sloth.NoActionBar">
+
+        </activity>
 
         <service android:name=".Services.FirebaseMessagingService">
             <intent-filter>

@@ -11,17 +11,20 @@ import android.graphics.Color;
 import android.os.Build;
 
 import com.aman.sloth.Model.CustomerInfoModel;
+import com.aman.sloth.Model.ShopModel;
 import com.aman.sloth.Services.FirebaseMessagingService;
 
 import androidx.core.app.NotificationCompat;
 
 public class Common {
     public static final String CUSTOMER_INFO_REFERENCE = "CustomerInfo";
+    public static final String SHOP_DATA_REFERENCE = "ShopData";
     public static final String SHOP_INFO_REFERENCE = "ShopInfo";
     public static final String TOKEN_REFERENCE = "UserToken";
     public static final String NOTIFICATION_TITLE = "title";
     public static final String NOTIFICATION_CONTENT = "content";
     public static CustomerInfoModel currentCustomer;
+    public static ShopModel shopModel;
     public static final String[] text = {"", "Feeling \nlazy?", "Get anything \n delivered", "Even \n     yourself!"};
     public int ID_MAP = 1;
     public int ID_HOME = 2;

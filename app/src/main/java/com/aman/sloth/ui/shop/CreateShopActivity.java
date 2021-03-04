@@ -2,6 +2,7 @@ package com.aman.sloth.ui.shop;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -44,8 +45,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.internal.bind.ArrayTypeAdapter;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -76,7 +80,8 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
     private LocationCallback locationCallback;
 
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    private DatabaseReference shopDatadatabaseReference;
+    private DatabaseReference shopInfodatabaseReference;
 
 
     private Button continueButton;
@@ -95,8 +100,31 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
         mapInitialize();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(Common.SHOP_INFO_REFERENCE);
+        shopDatadatabaseReference = firebaseDatabase.getReference(Common.SHOP_DATA_REFERENCE);
+        shopInfodatabaseReference = firebaseDatabase.getReference(Common.SHOP_INFO_REFERENCE);
         buttonHandling();
+
+//        shopInfodatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        for(DataSnapshot data: snapshot.getChildren()) {
+//                            if(data.exists()) {
+//                                //exists
+//                                Intent intent = new Intent(getApplicationContext(), ShopDashboardActivity.class);
+//                                startActivity(intent);
+//                            }
+//                            else {
+//                                //does not exist
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
     }
 
     private void buttonHandling() {
@@ -124,24 +152,34 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
                     try {
                         addresseList = geocoder.getFromLocation(shopLocation.latitude, shopLocation.longitude, 1);
                         cityname = addresseList.get(0).getLocality();
-                        Log.e("city", cityname);
+                        Log.e("ciity", cityname);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    shopModel = new ShopModel(edit_shop_name.getText().toString(), edit_shop_description.getText().toString() ,edit_category.getText().toString());
+                    shopModel = new ShopModel(edit_shop_name.getText().toString(), edit_shop_description.getText().toString() ,edit_category.getText().toString(), cityname);
                 }
-                databaseReference = databaseReference.child(cityname);
-                geoFire = new GeoFire(databaseReference);
+                Map<String, Object> values = shopModel.toMap();
+                shopInfodatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .setValue(values);
+
+                shopDatadatabaseReference = shopDatadatabaseReference.child(cityname);
+                geoFire = new GeoFire(shopDatadatabaseReference.child("shop_location"));
                 geoFire.setLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(),
                         new GeoLocation(shopLocation.latitude, shopLocation.longitude),
                         (key, error) -> {
                             if (error != null)
                                 Log.e("geofire", error.getMessage());
                         });
-                Map<String, Object> values = shopModel.toMap();
-                databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .updateChildren(values);
+                //Map<String, Object> values = shopModel.toMap();
+//                shopDatadatabaseReference.child("shop_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                        .updateChildren(values);
+
+                Intent intent = new Intent(getApplicationContext(), ShopDashboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
 
             }
         });

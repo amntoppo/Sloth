@@ -33,9 +33,13 @@ import com.aman.sloth.Common;
 import com.aman.sloth.R;
 import com.aman.sloth.ui.search.searchFragment;
 import com.aman.sloth.ui.shop.CreateShopActivity;
+import com.aman.sloth.ui.shop.ShopDashboardActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tomer.fadingtextview.FadingTextView;
 
 import java.util.Timer;
@@ -58,12 +62,15 @@ public class GalleryFragment extends Fragment implements View.OnClickListener{
     private LinearLayout layoutDeliverYourself;
     private LinearLayout layoutCreateShop;
 
+    private DatabaseReference shopInfodatabaseReference;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         galleryViewModel =
                 new ViewModelProvider(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
 
+        shopInfodatabaseReference = FirebaseDatabase.getInstance().getReference(Common.SHOP_INFO_REFERENCE);
         initializeButtons(root);
 
         //customer_first_name = Common.currentCustomer.getFirstname();
@@ -144,10 +151,39 @@ public class GalleryFragment extends Fragment implements View.OnClickListener{
             case R.id.layout_get_yourself_delivered:
                 break;
             case R.id.layout_create_shop:
-                Intent intent = new Intent(getActivity(), CreateShopActivity.class);
-                startActivity(intent);
+                checkForShop();
+
                 break;
 
         }
+    }
+
+    private void checkForShop() {
+        shopInfodatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot data: snapshot.getChildren()) {
+                            if(data.exists()) {
+                                //exists
+                                Log.e("data", data.toString());
+                                Intent intent = new Intent(getContext(), ShopDashboardActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+                            else {
+                                //does not exist
+                                Intent intent = new Intent(getActivity(), CreateShopActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 }
