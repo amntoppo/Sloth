@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -21,6 +23,8 @@ import com.aman.sloth.Common;
 import com.aman.sloth.Model.CustomerInfoModel;
 import com.aman.sloth.Model.ShopModel;
 import com.aman.sloth.R;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -34,6 +38,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,6 +53,12 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,6 +82,10 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
     private Button continueButton;
 
     private ShopModel shopModel;
+    private LatLng shopLocation;
+    private String cityname;
+
+    private GeoFire geoFire;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +105,7 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
         TextInputEditText edit_shop_description = (TextInputEditText) findViewById(R.id.edit_description);
         TextInputEditText edit_category = (TextInputEditText) findViewById(R.id.edit_category);
 
+
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,16 +119,30 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
                     Toast.makeText(getApplicationContext(), "Please enter phone number", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    List<Address> addresseList;
+                    try {
+                        addresseList = geocoder.getFromLocation(shopLocation.latitude, shopLocation.longitude, 1);
+                        cityname = addresseList.get(0).getLocality();
+                        Log.e("city", cityname);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     shopModel = new ShopModel(edit_shop_name.getText().toString(), edit_shop_description.getText().toString() ,edit_category.getText().toString());
                 }
-                databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .setValue(shopModel)
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e("firebase", e.getMessage());
-                            }
+                databaseReference = databaseReference.child(cityname);
+                geoFire = new GeoFire(databaseReference);
+                geoFire.setLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        new GeoLocation(shopLocation.latitude, shopLocation.longitude),
+                        (key, error) -> {
+                            if (error != null)
+                                Log.e("geofire", error.getMessage());
                         });
+                Map<String, Object> values = shopModel.toMap();
+                databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .updateChildren(values);
+
             }
         });
     }
@@ -153,7 +183,24 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
 
                 mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(newPosition, 18f));
                 mmap.clear();
-                mmap.addMarker(new MarkerOptions().icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.shop_location)).position(newPosition).title("shop").snippet("Location of shop"));
+                Marker shopLocationMarker = mmap.addMarker(new MarkerOptions().icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.shop_location)).position(newPosition).title("shop").snippet("Location of shop").draggable(true));
+                shopLocation = shopLocationMarker.getPosition();
+                mmap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                    @Override
+                    public void onMarkerDragStart(Marker marker) {
+
+                    }
+
+                    @Override
+                    public void onMarkerDrag(Marker marker) {
+                        shopLocation = marker.getPosition();
+                    }
+
+                    @Override
+                    public void onMarkerDragEnd(Marker marker) {
+
+                    }
+                });
             }
         };
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());

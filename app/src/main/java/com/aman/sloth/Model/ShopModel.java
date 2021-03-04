@@ -1,5 +1,8 @@
 package com.aman.sloth.Model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ShopModel {
     private String shopName, description, category;
 
@@ -31,5 +34,13 @@ public class ShopModel {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("shopname", shopName);
+        result.put("description", description);
+        result.put("category", category);
+        return result;
     }
 }
