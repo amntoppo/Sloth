@@ -159,6 +159,7 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
                     }
 
                     shopModel = new ShopModel(edit_shop_name.getText().toString(), edit_shop_description.getText().toString() ,edit_category.getText().toString(), cityname);
+                    Common.shopModel = shopModel;
                 }
                 Map<String, Object> values = shopModel.toMap();
                 shopInfodatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -175,6 +176,7 @@ public class CreateShopActivity extends AppCompatActivity implements OnMapReadyC
                 //Map<String, Object> values = shopModel.toMap();
 //                shopDatadatabaseReference.child("shop_data").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
 //                        .updateChildren(values);
+
 
                 Intent intent = new Intent(getApplicationContext(), ShopDashboardActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
