@@ -52,8 +52,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edit_phone_number"
-                    android:hint="@string/phone_number"/>
+                    android:id="@+id/edit_description"
+                    android:hint="@string/create_shop_description"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +92,7 @@
         android:background="@color/white"
         android:fadingEdge="horizontal"
 
-        android:id="@+id/button_create_shop"
+        android:id="@+id/button_create_shop_continue"
         style="@style/Widget.MaterialComponents.Button"
         android:text="@string/continue_text"/>
 

@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 
 public class Common {
     public static final String CUSTOMER_INFO_REFERENCE = "CustomerInfo";
+    public static final String SHOP_INFO_REFERENCE = "ShopInfo";
     public static final String TOKEN_REFERENCE = "UserToken";
     public static final String NOTIFICATION_TITLE = "title";
     public static final String NOTIFICATION_CONTENT = "content";
