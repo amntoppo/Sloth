@@ -50,7 +50,7 @@ public class ItemDialog extends AppCompatDialogFragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.e("dialog", "Addd");
+
                         listener.itemData(itemNameEditText.getText().toString(), Integer.parseInt(itemPriceEditText.getText().toString()));
 
                     }

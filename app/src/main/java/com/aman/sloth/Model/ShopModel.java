@@ -6,6 +6,11 @@ import java.util.Map;
 public class ShopModel {
     private String shopName, description, category, city;
 
+    public ShopModel(Object value) {
+//        this.shopName = value.shopname;
+//        this.description = value.description;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -32,6 +37,7 @@ public class ShopModel {
     public String getCategory() {
         return category;
     }
+    public String getCity() { return city; }
 
     public void setCategory(String category) {
         this.category = category;

@@ -11,6 +11,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -51,8 +54,12 @@ public class ShopDashboardActivity extends AppCompatActivity implements ItemDial
 
     @Override
     public void itemData(String itemName, int price) {
-        Log.e("itemdata", itemName + price);
-        //shopDataReference.child()
+        HashMap<String, Object> values = new HashMap<>();
+        values.put(itemName, price);
+        shopDataReference.child(Common.shopModel.getCity())
+                .child("shop_items")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .setValue(values);
 
     }
 }

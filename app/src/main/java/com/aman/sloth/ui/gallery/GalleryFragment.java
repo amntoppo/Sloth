@@ -30,6 +30,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 import com.aman.sloth.Common;
+import com.aman.sloth.Model.ShopModel;
 import com.aman.sloth.R;
 import com.aman.sloth.ui.search.searchFragment;
 import com.aman.sloth.ui.shop.CreateShopActivity;
@@ -163,20 +164,41 @@ public class GalleryFragment extends Fragment implements View.OnClickListener{
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot data: snapshot.getChildren()) {
-                            if(data.exists()) {
-                                //exists
-                                Log.e("data", data.toString());
-                                Intent intent = new Intent(getContext(), ShopDashboardActivity.class);
+//                        for(DataSnapshot data: snapshot.getChildren()) {
+//                            if(data.exists()) {
+//                                //exists
+//                                //ShopModel shopModel = new ShopModel(snapshot.getValue());
+//                                Log.e("data", data.toString());
+//                                Log.e("snapshot", snapshot.toString());
+//                                //snapshot.getValue();
+//                                Intent intent = new Intent(getContext(), ShopDashboardActivity.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startActivity(intent);
+//                            }
+//                            else {
+//                                //does not exist
+//                                Intent intent = new Intent(getActivity(), CreateShopActivity.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startActivity(intent);
+//                            }
+//                        }
+                        if(snapshot.exists()) {
+                            Log.e("snap", snapshot.toString());
+                            Log.e("city", snapshot.child("city").getValue().toString());
+                            ShopModel shopModel = new ShopModel(snapshot.child("shopname").getValue().toString(),
+                                    snapshot.child("description").getValue().toString(),
+                                    snapshot.child("category").getValue().toString(),
+                                    snapshot.child("city").getValue().toString());
+                            Common.shopModel = shopModel;
+                            Intent intent = new Intent(getContext(), ShopDashboardActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
-                            }
-                            else {
-                                //does not exist
+                        }
+                        else {
+                            //does not exist
                                 Intent intent = new Intent(getActivity(), CreateShopActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
-                            }
                         }
                     }
 
