@@ -140,7 +140,7 @@ public class ShopDashboardActivity extends AppCompatActivity implements ItemDial
 
     @Override
     public void itemData(String itemName, int price) {
-        arrayList.clear();
+
         //HashMap<String, Object> values = new HashMap<>();
         //values.put(itemName, price);
         shopItemModel = new ShopItemModel(itemName, price);

@@ -145,6 +145,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.layout_order_home:
                 Log.e("button", "order home");
+                showNearbyShops();
                 break;
             case R.id.layout_deliver_anything:
                 Log.e("button", "order anything");
@@ -157,6 +158,10 @@ public class GalleryFragment extends Fragment implements View.OnClickListener{
                 break;
 
         }
+    }
+
+    private void showNearbyShops() {
+
     }
 
     private void checkForShop() {

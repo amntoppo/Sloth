@@ -14,7 +14,7 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.Sloth.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
             android:name=".SplashScreenActivity"
             android:theme="@style/SplashTheme" >
@@ -25,12 +25,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.shop.CreateShopActivity"
-            android:theme="@style/Theme.Sloth.NoActionBar"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+            android:noHistory="true" >
+
+        </activity>
+        <activity android:name=".ui.orderHome.nearbyShopsActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             android:noHistory="true" >
 
         </activity>
         <activity android:name=".ui.shop.ShopDashboardActivity"
-            android:theme="@style/Theme.Sloth.NoActionBar">
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
 
         </activity>
 
