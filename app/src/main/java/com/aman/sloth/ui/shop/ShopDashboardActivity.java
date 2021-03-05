@@ -1,5 +1,6 @@
 package com.aman.sloth.ui.shop;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +10,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.aman.sloth.Common;
+import com.aman.sloth.Model.ShopItemModel;
 import com.aman.sloth.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,9 +37,11 @@ public class ShopDashboardActivity extends AppCompatActivity implements ItemDial
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference shopDataReference;
 
-    private ArrayList<String> arrayList = new ArrayList<>();
+    private ArrayList<ShopItemModel> arrayList = new ArrayList<>();
     HashMap<String, String> hashSnap = new HashMap<>();
-    private ArrayAdapter adapter;
+    private ListViewAdapter adapter;
+
+    private ShopItemModel shopItemModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,30 +55,42 @@ public class ShopDashboardActivity extends AppCompatActivity implements ItemDial
     }
 
     private void listViewInitialize() {
-        adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_shop_items, arrayList);
+        adapter = new ListViewAdapter(this, arrayList);
         listView = findViewById(R.id.item_list_view);
         listView.setAdapter(adapter);
 
         shopDataReference.child(Common.shopModel.getCity())
                 .child("shop_items")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .addValueEventListener(new ValueEventListener() {
+                .addChildEventListener(new ChildEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //update View
-                        //HashMap<String, String> hash = snapshot.getValue(HashMap.class);
-                        //DataSnapshot hashSnap = (DataSnapshot) snapshot.getValue();
-
-                        //Log.e("item", hashSnap.getKey().toString());
-                        Log.e("item", snapshot.getValue().toString());
-                        //arrayList.add(hashSnap.getValue().toString());
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        //Log.e("item", snapshot.toString());
+//                        for(DataSnapshot data: snapshot.getChildren()) {
+//                            shopItemModel = new ShopItemModel(data.getValue("itemName"),)
+//                        }
+                        shopItemModel = new ShopItemModel();
+                        shopItemModel.setItemName(snapshot.getValue(ShopItemModel.class).getItemName());
+                        shopItemModel.setPrice(snapshot.getValue(ShopItemModel.class).getPrice());
+                        arrayList.add(shopItemModel);
+                        Log.e("array", arrayList.get(0).getItemName());
                         adapter.notifyDataSetChanged();
-                        for(DataSnapshot data: snapshot.getChildren()) {
-                            hashSnap.put(data.getKey(), data.getValue().toString());
-                            arrayList.add(data.getValue().toString());
-                            Log.e("hash", hashSnap.toString());
-                        }
 
+                        //Log.e("itemChild", snapshot.getChildren().toString());
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                     }
 
@@ -123,12 +141,14 @@ public class ShopDashboardActivity extends AppCompatActivity implements ItemDial
     @Override
     public void itemData(String itemName, int price) {
         arrayList.clear();
-        HashMap<String, Object> values = new HashMap<>();
-        values.put(itemName, price);
+        //HashMap<String, Object> values = new HashMap<>();
+        //values.put(itemName, price);
+        shopItemModel = new ShopItemModel(itemName, price);
         shopDataReference.child(Common.shopModel.getCity())
                 .child("shop_items")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .updateChildren(values);
+                .child(FirebaseDatabase.getInstance().getReference().push().getKey())
+                .setValue(shopItemModel);
 
     }
 
