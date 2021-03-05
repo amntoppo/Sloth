@@ -28,6 +28,7 @@
     <string name="create_shop_description">Shop Description</string>
     <string name="item_name">Item Name</string>
     <string name="price">Enter price</string>
+    <string name="add_items">Add</string>
 
     <string-array name="itemselect">
         <item>Medicines</item>

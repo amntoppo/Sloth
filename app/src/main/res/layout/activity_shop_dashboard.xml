@@ -5,11 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button_add_item_to_shop"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_item_to_shop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add item"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="97dp" />
+        android:layout_alignParentEnd="true"
+
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="45dp"
+        android:contentDescription="@string/add_items"
+        android:src="@drawable/add_icon" />
+
+    <ListView
+        android:id="@+id/item_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>
