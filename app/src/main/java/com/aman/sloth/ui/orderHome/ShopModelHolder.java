@@ -1,5 +1,6 @@
 package com.aman.sloth.ui.orderHome;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -16,6 +17,8 @@ public class ShopModelHolder extends RecyclerView.ViewHolder {
     private MaterialTextView shopDescTextView;
     private MaterialTextView shopCategoryTextView;
     private onItemClickedListener listener;
+    private String shop_id;
+    private String city;
 
     public ShopModelHolder(@NonNull View itemView) {
         super(itemView);
@@ -44,12 +47,14 @@ public class ShopModelHolder extends RecyclerView.ViewHolder {
     public void setShopCategory(String shopCategory) {
         shopCategoryTextView.setText(shopCategory);
     }
-
+    public void setShopId(String id) {
+        this.shop_id = id;
+    }
 
     public interface onItemClickedListener {
         void onItemClicked(View view, int position);
     }
-    public void setOnItemClickListener(onItemClickedListener listener) {
+    public void setOnItemClickListener(ShopModelHolder.onItemClickedListener listener) {
         this.listener = listener;
     }
 }

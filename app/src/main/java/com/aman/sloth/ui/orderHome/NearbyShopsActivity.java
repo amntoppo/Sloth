@@ -1,5 +1,6 @@
 package com.aman.sloth.ui.orderHome;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,11 +22,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class NearbyShopsActivity extends AppCompatActivity {
+public class NearbyShopsActivity extends AppCompatActivity implements ShopModelHolder.onItemClickedListener{
 
     private RecyclerView recyclerView;
     private DatabaseReference databaseReference;
 
+    private ShopModelHolder shopModelHolder;
     private FirebaseRecyclerAdapter<ShopModel, ShopModelHolder> adapter;
 
     @Override
@@ -39,6 +41,8 @@ public class NearbyShopsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
+
+
 
     @Override
     protected void onStart() {
@@ -56,6 +60,7 @@ public class NearbyShopsActivity extends AppCompatActivity {
                 Log.e("shop", shopModel.toMap().toString());
                 shopModelHolder.setShopCategory(shopModel.getCategory());
                 shopModelHolder.setShopDesc(shopModel.getDescription());
+
             }
 
             @NonNull
@@ -64,16 +69,41 @@ public class NearbyShopsActivity extends AppCompatActivity {
 
 
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_nearby_shops, parent, false);
-                return new ShopModelHolder(view);
+                shopModelHolder = new ShopModelHolder(view);
+                shopModelHolder.setOnItemClickListener(new ShopModelHolder.onItemClickedListener() {
+                    @Override
+                    public void onItemClicked(View view, int position) {
+                        Log.e("item", String.valueOf(position));
+                        shopModelHolder.setShopId(getSnapshots().getSnapshot(position).getKey()); // no use
+                        String shopID = getSnapshots().getSnapshot(position).getKey().toString();
+                        String city = getSnapshots().getSnapshot(position).child("city").getValue(String.class);
+                        Intent intent = new Intent(getApplicationContext(), ShopItemsActivity.class);
+                        intent.putExtra("shop_id", shopID);
+                        intent.putExtra("shop_city", city);
+                        startActivity(intent);
+                    }
+                });
+                return shopModelHolder;
             }
         };
+
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+        //setShopClickListener();
     }
+
+
+
+
 
     @Override
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public void onItemClicked(View view, int position) {
+
     }
 }
