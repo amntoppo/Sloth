@@ -1,6 +1,7 @@
 package com.aman.sloth.ui.orderHome;
 
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.aman.sloth.R;
 import com.google.android.material.button.MaterialButton;
@@ -14,6 +15,7 @@ public class ShopModelHolder extends RecyclerView.ViewHolder {
     private MaterialTextView shopNameTextView;
     private MaterialTextView shopDescTextView;
     private MaterialTextView shopCategoryTextView;
+    private onItemClickedListener listener;
 
     public ShopModelHolder(@NonNull View itemView) {
         super(itemView);
@@ -21,6 +23,17 @@ public class ShopModelHolder extends RecyclerView.ViewHolder {
         shopNameTextView = mView.findViewById(R.id.material_textview_shop_name);
         shopDescTextView = mView.findViewById(R.id.material_textview_shop_description);
         shopCategoryTextView = mView.findViewById(R.id.material_textview_shop_category);
+
+        mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = getAdapterPosition();
+                if(position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemClicked(mView, position);
+                }
+            }
+        });
+
     }
     public void setShopName(String shopName) {
         shopNameTextView.setText(shopName);
@@ -30,5 +43,13 @@ public class ShopModelHolder extends RecyclerView.ViewHolder {
     }
     public void setShopCategory(String shopCategory) {
         shopCategoryTextView.setText(shopCategory);
+    }
+
+
+    public interface onItemClickedListener {
+        void onItemClicked(View view, int position);
+    }
+    public void setOnItemClickListener(onItemClickedListener listener) {
+        this.listener = listener;
     }
 }
