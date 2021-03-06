@@ -32,6 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 import com.aman.sloth.Common;
 import com.aman.sloth.Model.ShopModel;
 import com.aman.sloth.R;
+import com.aman.sloth.ui.orderHome.NearbyShopsActivity;
 import com.aman.sloth.ui.search.searchFragment;
 import com.aman.sloth.ui.shop.CreateShopActivity;
 import com.aman.sloth.ui.shop.ShopDashboardActivity;
@@ -161,7 +162,8 @@ public class GalleryFragment extends Fragment implements View.OnClickListener{
     }
 
     private void showNearbyShops() {
-
+        Intent intent = new Intent(getActivity(), NearbyShopsActivity.class);
+        startActivity(intent);
     }
 
     private void checkForShop() {

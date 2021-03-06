@@ -29,7 +29,7 @@
             android:noHistory="true" >
 
         </activity>
-        <activity android:name=".ui.orderHome.nearbyShopsActivity"
+        <activity android:name=".ui.orderHome.NearbyShopsActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             android:noHistory="true" >
 
