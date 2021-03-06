@@ -29,7 +29,9 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -41,6 +43,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,7 +62,11 @@ public class searchFragment extends Fragment {
     private RecyclerView recyclerView;
     private DatabaseReference shopDatabaseReference;
 
-    private FirebaseRecyclerAdapter<ShopItemModel, SearchItemHolder> adapter;
+    //private FirebaseRecyclerAdapter<ShopItemModel, SearchItemHolder> adapter;
+    private SearchAdapter adapter;
+    private ArrayList<ShopItemModel> itemList = new ArrayList<>();
+    private ArrayList<ShopItemModel> searchList = new ArrayList<>();
+
     private SearchItemHolder searchItemHolder;
 
     private GeoFire geoFire;
@@ -77,52 +84,53 @@ public class searchFragment extends Fragment {
         askPermission();
         //getCity();
         recyclerView = root.findViewById(R.id.recycler_view_search);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewSetup();
+
+
+
         return root;
     }
 
-    private void getCity() {
-//                locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-//        List<Address> addresseList;
-//        try {
-//            addresseList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-//            cityName = addresseList.get(0).getLocality();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        Context context;
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+    private void recyclerViewSetup() {
+        shopDatabaseReference.child(Common.CURRENT_CITY).child("shop_items").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onSuccess(Location location) {
-                Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        List<Address> addresseList;
-        try {
-            addresseList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            cityName = addresseList.get(0).getLocality();
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                for(DataSnapshot data: snapshot.getChildren()) {
+                    Log.e("key", data.getKey());
+                    //Log.e("data", data.getValue(String.class));
+                    ShopItemModel shopItemModel;
+                    shopItemModel = data.getValue(ShopItemModel.class);
+                    itemList.add(shopItemModel);
+                    Log.e("data", itemList.get(0).getItemName());
+                }
+            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
+        adapter = new SearchAdapter(itemList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
     }
+
 
     private void askPermission() {
         Dexter.withContext(getContext())
@@ -154,50 +162,19 @@ public class searchFragment extends Fragment {
         super.onStart();
         Log.e("CURRENTCITY", Common.CURRENT_CITY);
         Query query = shopDatabaseReference.child(Common.CURRENT_CITY).child("shop_items").orderByChild("2w6RkGhNzlajfPnwlRbF0oUp6pE2");
-//        DataSnapshot aa = //shopDatabaseReference.child(Common.CURRENT_CITY).child("shop_items");
-//                shopDatabaseReference.child(Common.CURRENT_CITY).child("shop_items")
-//                        .get().getResult();
 
-
-        FirebaseRecyclerOptions<ShopItemModel> options = new FirebaseRecyclerOptions.Builder<ShopItemModel>()
-                .setQuery(query, ShopItemModel.class)
-                .build();
-
-        adapter = new FirebaseRecyclerAdapter<ShopItemModel, SearchItemHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull SearchItemHolder searchItemHolder, int i, @NonNull ShopItemModel shopItemModel) {
-                searchItemHolder.setShopItemTextView(shopItemModel.getItemName());
-                searchItemHolder.setShopPriceTextView("Rs." + shopItemModel.getPrice());
-//                if(shopItemModel.getItemName().isEmpty()) {
-//
-//                }
-//                else {
-//                    Log.e("shopitem", "exists");
-//                }
-
-            }
-
-            @NonNull
-            @Override
-            public SearchItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_search_items, parent, false);
-                searchItemHolder = new SearchItemHolder(view);
-                return searchItemHolder;
-            }
-        };
-        recyclerView.setAdapter(adapter);
-        adapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+        //adapter.stopListening();
     }
 
     private void initialize(View root) {
         editText = root.findViewById(R.id.search_edit_text);
         shopDatabaseReference = FirebaseDatabase.getInstance().getReference(Common.SHOP_DATA_REFERENCE);
+
     }
 
     private void searchForItems() {
@@ -209,7 +186,11 @@ public class searchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                for(ShopItemModel model: itemList) {
+                    if(model.getItemName().contains(s)) {
+                        //do
+                    }
+                }
             }
 
             @Override
