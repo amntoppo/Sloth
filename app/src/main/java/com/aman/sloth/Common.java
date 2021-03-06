@@ -23,6 +23,7 @@ public class Common {
     public static final String TOKEN_REFERENCE = "UserToken";
     public static final String NOTIFICATION_TITLE = "title";
     public static final String NOTIFICATION_CONTENT = "content";
+    public static String CURRENT_CITY = "city";
     public static CustomerInfoModel currentCustomer;
     public static ShopModel shopModel;
     public static final String[] text = {"", "Feeling \nlazy?", "Get anything \n delivered", "Even \n     yourself!"};
