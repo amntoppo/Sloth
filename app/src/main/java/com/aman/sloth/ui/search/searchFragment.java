@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aman.sloth.Common;
@@ -125,10 +128,7 @@ public class searchFragment extends Fragment {
 
             }
         });
-        adapter = new SearchAdapter(itemList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
+
     }
 
 
@@ -178,23 +178,50 @@ public class searchFragment extends Fragment {
     }
 
     private void searchForItems() {
-        editText.addTextChangedListener(new TextWatcher() {
+//        editText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                for(ShopItemModel model: itemList) {
+//                    if(model.getItemName().contains(s)) {
+//                        //do
+//                        searchList.add(model);
+//                        adapter = new SearchAdapter(searchList);
+//                        recyclerView.setHasFixedSize(true);
+//                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//                        recyclerView.setAdapter(adapter);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE) {
+                    searchList.clear();
+                    Log.e("emter", "pressed");
+                    for(ShopItemModel model: itemList) {
+                        if(model.getItemName().contains(editText.getText())) {
+                            //do
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                for(ShopItemModel model: itemList) {
-                    if(model.getItemName().contains(s)) {
-                        //do
+                            searchList.add(model);
+                            adapter = new SearchAdapter(searchList);
+                            recyclerView.setHasFixedSize(true);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            recyclerView.setAdapter(adapter);
+                        }
                     }
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+                return false;
 
             }
         });
