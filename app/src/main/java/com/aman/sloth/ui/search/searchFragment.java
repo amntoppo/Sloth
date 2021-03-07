@@ -99,12 +99,10 @@ public class searchFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 for(DataSnapshot data: snapshot.getChildren()) {
-                    Log.e("key", data.getKey());
                     //Log.e("data", data.getValue(String.class));
                     ShopItemModel shopItemModel;
                     shopItemModel = data.getValue(ShopItemModel.class);
                     itemList.add(shopItemModel);
-                    Log.e("data", itemList.get(0).getItemName());
                 }
             }
 
@@ -160,8 +158,6 @@ public class searchFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.e("CURRENTCITY", Common.CURRENT_CITY);
-        Query query = shopDatabaseReference.child(Common.CURRENT_CITY).child("shop_items").orderByChild("2w6RkGhNzlajfPnwlRbF0oUp6pE2");
 
     }
 

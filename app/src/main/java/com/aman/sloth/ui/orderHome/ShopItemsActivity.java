@@ -69,6 +69,7 @@ public class ShopItemsActivity extends AppCompatActivity {
                         shopItemModel = new ShopItemModel();
                         shopItemModel.setItemName(snapshot.getValue(ShopItemModel.class).getItemName());
                         shopItemModel.setPrice(snapshot.getValue(ShopItemModel.class).getPrice());
+                        shopItemModel.setshopID(shopID);
                         arrayList.add(shopItemModel);
                         Log.e("array", arrayList.get(0).getItemName());
                         adapter.notifyDataSetChanged();

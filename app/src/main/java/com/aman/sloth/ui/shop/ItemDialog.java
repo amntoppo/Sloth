@@ -8,8 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.aman.sloth.Common;
 import com.aman.sloth.R;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,7 +55,7 @@ public class ItemDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        listener.itemData(itemNameEditText.getText().toString(), Integer.parseInt(itemPriceEditText.getText().toString()));
+                        listener.itemData(itemNameEditText.getText().toString(), Integer.parseInt(itemPriceEditText.getText().toString()), FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
 
                     }
                 });
@@ -61,7 +65,7 @@ public class ItemDialog extends AppCompatDialogFragment {
         return builder.create();
     }
     public interface AdditemDialogListener{
-        void itemData(String itemName, int price);
+        void itemData(String itemName, int price, String shopID);
     }
 
 }

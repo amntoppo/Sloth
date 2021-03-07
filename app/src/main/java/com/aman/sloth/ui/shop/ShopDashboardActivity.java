@@ -139,11 +139,11 @@ public class ShopDashboardActivity extends AppCompatActivity implements ItemDial
     }
 
     @Override
-    public void itemData(String itemName, int price) {
+    public void itemData(String itemName, int price, String shopID) {
 
         //HashMap<String, Object> values = new HashMap<>();
         //values.put(itemName, price);
-        shopItemModel = new ShopItemModel(itemName, price);
+        shopItemModel = new ShopItemModel(itemName, price, shopID);
         shopDataReference.child(Common.shopModel.getCity())
                 .child("shop_items")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
