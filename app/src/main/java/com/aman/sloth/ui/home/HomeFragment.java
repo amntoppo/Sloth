@@ -3,11 +3,15 @@ package com.aman.sloth.ui.home;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -45,6 +50,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -73,7 +80,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+public class HomeFragment extends Fragment implements OnMapReadyCallback, FirebaseShopInfoListener {
 
     private GoogleMap mMap;
     private HomeViewModel homeViewModel;
@@ -165,17 +172,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+        //loadShopsinMap();
     }
 
     private void loadShopsinMap() {
         if(Common.CURRENT_CITY != null) {
-            GeoFire geofire = new GeoFire(locationReference.child(Common.CURRENT_CITY));
+            Log.e("current", "loadshopsinmaps");
+            GeoFire geofire = new GeoFire(locationReference.child(Common.CURRENT_CITY).child("shop_location"));
             GeoQuery geoQuery = geofire.queryAtLocation(new GeoLocation(previousLocation.getLatitude(), previousLocation.getLongitude()),distance);
             geoQuery.removeAllListeners();
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(String key, GeoLocation location) {
                     Common.shopLocation.add(new ShopGeoModel(key, location));
+                    Log.e("query", "geo");
                 }
 
                 @Override
@@ -253,7 +263,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.hasChildren()) {
                             shopGeoModel.setShopModel(snapshot.getValue(ShopModel.class));
-                            FirebaseShopInfoListener.
+                            onShopInfoLoadSuccess(shopGeoModel);
                         }
                     }
 
@@ -339,6 +349,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onShopInfoLoadSuccess(ShopGeoModel shopGeoModel) {
-
+        Log.e("callback", "listens");
+        if(!Common.shopMarkerList.containsKey(shopGeoModel.getKey())) {
+            Common.shopMarkerList.put(shopGeoModel.getKey(),mMap.addMarker(new MarkerOptions()
+            .position(new LatLng(shopGeoModel.getGeoLocation().latitude,shopGeoModel.getGeoLocation().longitude))
+            .flat(true)
+            .title(shopGeoModel.getShopModel().getShopName())
+            .icon(bitmapDescriptorFromVector(getActivity(),R.drawable.shop_icon))));
+        }
+    }
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }

@@ -15,7 +15,9 @@ import com.aman.sloth.Model.CustomerInfoModel;
 import com.aman.sloth.Model.ShopGeoModel;
 import com.aman.sloth.Model.ShopModel;
 import com.aman.sloth.Services.FirebaseMessagingService;
+import com.google.android.gms.maps.model.Marker;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +35,7 @@ public class Common {
     public static ShopModel shopModel;
     public static final String[] text = {"", "Feeling \nlazy?", "Get anything \n delivered", "Even \n     yourself!"};
     public static Set<ShopGeoModel> shopLocation = new HashSet<ShopGeoModel>();
+    public static HashMap<String, Marker> shopMarkerList = new HashMap<>();
     public int ID_MAP = 1;
     public int ID_HOME = 2;
     public int ID_SETTINGS = 3;
