@@ -9,10 +9,15 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.ArraySet;
 
 import com.aman.sloth.Model.CustomerInfoModel;
+import com.aman.sloth.Model.ShopGeoModel;
 import com.aman.sloth.Model.ShopModel;
 import com.aman.sloth.Services.FirebaseMessagingService;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import androidx.core.app.NotificationCompat;
 
@@ -23,10 +28,11 @@ public class Common {
     public static final String TOKEN_REFERENCE = "UserToken";
     public static final String NOTIFICATION_TITLE = "title";
     public static final String NOTIFICATION_CONTENT = "content";
-    public static String CURRENT_CITY = "city";
+    public static String CURRENT_CITY = null;
     public static CustomerInfoModel currentCustomer;
     public static ShopModel shopModel;
     public static final String[] text = {"", "Feeling \nlazy?", "Get anything \n delivered", "Even \n     yourself!"};
+    public static Set<ShopGeoModel> shopLocation = new HashSet<ShopGeoModel>();
     public int ID_MAP = 1;
     public int ID_HOME = 2;
     public int ID_SETTINGS = 3;

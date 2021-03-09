@@ -94,8 +94,7 @@ public class HomeActivity extends AppCompatActivity implements ILottieBottomNavC
                 List<Address> addresseList;
                 try {
                     addresseList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    String cityName = addresseList.get(0).getLocality();
-                    Common.CURRENT_CITY = cityName;
+                    Common.CURRENT_CITY = addresseList.get(0).getLocality();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

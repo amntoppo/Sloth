@@ -70,18 +70,15 @@ public class NearbyShopsActivity extends AppCompatActivity implements ShopModelH
 
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_nearby_shops, parent, false);
                 shopModelHolder = new ShopModelHolder(view);
-                shopModelHolder.setOnItemClickListener(new ShopModelHolder.onItemClickedListener() {
-                    @Override
-                    public void onItemClicked(View view, int position) {
-                        Log.e("item", String.valueOf(position));
-                        shopModelHolder.setShopId(getSnapshots().getSnapshot(position).getKey()); // no use
-                        String shopID = getSnapshots().getSnapshot(position).getKey().toString();
-                        String city = getSnapshots().getSnapshot(position).child("city").getValue(String.class);
-                        Intent intent = new Intent(getApplicationContext(), ShopItemsActivity.class);
-                        intent.putExtra("shop_id", shopID);
-                        intent.putExtra("shop_city", city);
-                        startActivity(intent);
-                    }
+                shopModelHolder.setOnItemClickListener((view1, position) -> {
+                    Log.e("item", String.valueOf(position));
+                    shopModelHolder.setShopId(getSnapshots().getSnapshot(position).getKey()); // no use
+                    String shopID = getSnapshots().getSnapshot(position).getKey().toString();
+                    String city = getSnapshots().getSnapshot(position).child("city").getValue(String.class);
+                    Intent intent = new Intent(getApplicationContext(), ShopItemsActivity.class);
+                    intent.putExtra("shop_id", shopID);
+                    intent.putExtra("shop_city", city);
+                    startActivity(intent);
                 });
                 return shopModelHolder;
             }
