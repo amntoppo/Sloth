@@ -78,8 +78,10 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -387,6 +389,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                 .check();
         try {
             boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
+            mMap.setOnMarkerClickListener(this);
             if(!success)
                 Snackbar.make(getView(),"Loading map failed", Snackbar.LENGTH_SHORT).show();
         }
@@ -425,8 +428,32 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public boolean onMarkerClick(Marker marker) {
         if(Common.shopMarkerList.containsValue(marker)) {
-            Log.e("marker", "clocked");
+            String markerID = getIDfromMarker(marker);
+            shopInfoReference.child(markerID)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()) {
+                                ShopModel shopModel = snapshot.getValue(ShopModel.class);
+                                Log.e("shopmodel", shopModel.getShopName());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    private String getIDfromMarker(Marker marker) {
+        HashMap<Marker, String> reversedHash = new HashMap<>();
+        for(Map.Entry<String, Marker> entry : Common.shopMarkerList.entrySet()) {
+            reversedHash.put(entry.getValue(), entry.getKey());
+        }
+        return reversedHash.get(marker);
     }
 }
